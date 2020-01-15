@@ -1,7 +1,9 @@
 ## Exploiting Vulnserver
 ```python 
 #!/usr/bin/python
-# Tested on Microsoft Windows 7 Enterprise
+# Tested on 
+# - Windows 7 Enterprise
+# - Windows Server 2012 R2 (DEP disabled)
 
 import socket
 
